@@ -8,7 +8,7 @@ import (
 )
 
 func TestNextSequenceNumber(t *testing.T) {
-	client := NewSMPPClient("localhost", 2775, "test", "test", "")
+	client := NewSMPPClient("smscsim.smpp.org", 2775, "TytZd4G7K7lcZyk", "SJCuybzs", "")
 
 	// Test sequence number increments
 	seq1 := client.nextSequenceNumber()
@@ -83,7 +83,7 @@ func TestSubmitSMParams(t *testing.T) {
 }
 
 func TestSplitLongMessage(t *testing.T) {
-	client := NewSMPPClient("localhost", 2775, "test", "test", "")
+	client := NewSMPPClient("smscsim.smpp.org", 2775, "TytZd4G7K7lcZyk", "SJCuybzs", "")
 
 	// Create a message that's just over the max length for GSM 7-bit
 	message := make([]byte, 160)
@@ -112,7 +112,7 @@ func TestSplitLongMessage(t *testing.T) {
 
 func TestSMPPAPI(t *testing.T) {
 	// Test API creation
-	api, err := NewSMPPAPI("localhost", 2775, "test", "test", "")
+	api, err := NewSMPPAPI("smscsim.smpp.org", 2775, "TytZd4G7K7lcZyk", "SJCuybzs", "")
 	if err != nil {
 		t.Errorf("Failed to create SMPP API: %v", err)
 	}

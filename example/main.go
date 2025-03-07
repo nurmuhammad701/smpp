@@ -139,4 +139,5 @@ func main() {
 	if err != nil {
 		log.Printf("Failed to disconnect: %v", err)
 	}
+	log.Println("SMPP client example completed")
 }
