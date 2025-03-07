@@ -3,20 +3,32 @@
 package main
 
 import (
+	"context"
 	"log"
 	"time"
 
 	"github.com/nurmuhammad701/smpp"
+	mongosh "github.com/nurmuhammad701/smpp/db"
 )
 
 func main() {
-	// Create a new SMPP API client
+	db, err := mongosh.Connect(context.Background())
+	if err != nil {
+		log.Fatalf("Failed to connect to MongoDB: %v", err)
+	}
+
+	productsRepo := mongosh.NewProductsRepository(db)
+	res, err := productsRepo.GetSMPPConfig(context.Background())
+	if err != nil {
+		log.Fatalf("Failed to fetch SMPP config: %v", err)
+	}
+
 	api, err := smpp.NewSMPPAPI(
-		"smscsim.smpp.org", // Replace with your SMPP server address
-		2775,               // Default SMPP port
-		"TytZd4G7K7lcZyk",  // System ID
-		"SJCuybzs",         // Password
-		"",                 // System Type (often empty)
+		res.Host,       // Replace with your SMPP server address
+		res.Port,       // Default SMPP port
+		res.Username,   // System ID
+		res.Password,   // Password
+		res.SystemType, // System Type (often empty)
 	)
 	if err != nil {
 		log.Fatalf("Failed to create SMPP API: %v", err)
@@ -103,11 +115,11 @@ func main() {
 
 	// Example of using the lower-level client directly
 	client := smpp.NewSMPPClient(
-		"smscsim.smpp.org",
-		2775,
-		"TytZd4G7K7lcZyk",
-		"SJCuybzs",
-		"",
+		res.Host,       // Replace with your SMPP server address
+		res.Port,       // Default SMPP port
+		res.Username,   // System ID
+		res.Password,   // Password
+		res.SystemType, // System Type (often empty)
 	)
 
 	err = client.Connect()
